@@ -80,15 +80,4 @@ RCT_EXTERN_METHOD(
                   stopScan:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject
                   )
-
-RCT_EXTERN_METHOD(
-                  getDeviceInfo:(RCTPromiseResolveBlock)resolve
-                  rejecter:(RCTPromiseRejectBlock)reject
-                  )
-
-RCT_EXTERN_METHOD(
-                  setOfflineData:(NSDictionary) value
-                  resolver:(RCTPromiseResolveBlock)resolve
-                  rejecter:(RCTPromiseRejectBlock)reject
-                  )
 @end
