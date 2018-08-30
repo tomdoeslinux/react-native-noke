@@ -284,7 +284,6 @@ public class RNNokeModule extends ReactContextBaseJavaModule {
       final WritableMap event = Arguments.createMap();
       event.putString("name", noke.getName());
       event.putString("mac", noke.getMac());
-      event.putString("session", noke.getSession()); // this may return null
       emitDeviceEvent("onNokeDiscovered", event);
       mNokeService.connectToNoke(noke);
     }
@@ -294,7 +293,6 @@ public class RNNokeModule extends ReactContextBaseJavaModule {
       final WritableMap event = Arguments.createMap();
       event.putString("name", noke.getName());
       event.putString("mac", noke.getMac());
-      event.putString("session", noke.getSession()); // this may return null
       emitDeviceEvent("onNokeConnecting", event);
     }
 
