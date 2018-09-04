@@ -90,7 +90,7 @@ public class NokeDeviceManager: NSObject, CBCentralManagerDelegate, NokeDeviceDe
     let globalUploadDefaultsKey = "noke-mobile-upload-queue"
     
     /// URL string for uploading data
-    public var uploadUrl = "https://lock-api-dev.appspot.com/upload/"
+    public var uploadUrl = "https://coreapi-sandbox.appspot.com/"
     
     /// URL string for fetching unlock commands
     public var unlockUrl: String = ""
@@ -105,7 +105,7 @@ public class NokeDeviceManager: NSObject, CBCentralManagerDelegate, NokeDeviceDe
     fileprivate var globalUploadQueue = [Dictionary<String,Any>]()
     
     /// API Key used for upload data endpoint
-    fileprivate var apiKey: String = ""
+    fileprivate var apiKey: String = "eyJhbGciOiJOT0tFX01PQklMRV9TQU5EQk9YIiwidHlwIjoiSldUIn0.eyJhbGciOiJOT0tFX01PQklMRV9TQU5EQk9YIiwiY29tcGFueV91dWlkIjoiODZiNWVjMWItOWQ0NC00ZjBhLTkwYmEtNDM2ZDE5MzFlM2QyIiwiaXNzIjoibm9rZS5jb20ifQ.6f9611baa91f07e95b3d67c29ff4ac9095d21052"
     
     /// CBCentralManager
     lazy var cm: CBCentralManager = CBCentralManager(delegate: self, queue:nil)
