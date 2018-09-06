@@ -253,7 +253,7 @@ public class RNNokeModule extends ReactContextBaseJavaModule {
             case where the mobile app should be making requests to the Noke Core API directly.
              */
 
-      //mNokeService.setUploadUrl("UPLOAD URL HERE");
+      mNokeService.setUploadUrl("https://coreapi-sandbox.appspot.com/upload/");
 
       //Start bluetooth scanning
       mNokeService.startScanningForNokeDevices();
