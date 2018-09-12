@@ -38,6 +38,7 @@ public enum NokeDeviceConnectionState : Int{
     case nokeDeviceConnectionStateConnected = 3
     case nokeDeviceConnectionStateSyncing = 4
     case nokeDeviceConnectionStateUnlocked = 5
+    case nokeDeviceConnectionStateLocked = 6
 }
 
 public enum NokeManagerBluetoothState : Int{

@@ -27,6 +27,10 @@ class RNNoke : RCTEventEmitter, NokeDeviceManagerDelegate {
             
             sendEvent(withName: "onNokeUnlocked", body: ["name": noke.name, "mac": noke.mac])
             break
+        case .nokeDeviceConnectionStateLocked:
+        
+            sendEvent(withName: "onNokeLocked", body: ["name": noke.name, "mac": noke.mac])
+            break
         case .nokeDeviceConnectionStateDisconnected:
             NokeDeviceManager.shared().cacheUploadQueue()
             NokeDeviceManager.shared().startScanForNokeDevices()
@@ -207,6 +211,7 @@ class RNNoke : RCTEventEmitter, NokeDeviceManagerDelegate {
             "onNokeConnected",
             "onNokeSyncing",
             "onNokeUnlocked",
+            "onNokeLocked",
             "onNokeDisconnected",
             "onBluetoothStatusChanged",
             "onError"

@@ -354,6 +354,7 @@ public class NokeDevice: NSObject, NSCoding, CBPeripheralDelegate{
                     }
                     else if(lockStateByte == 1){
                         self.lockState = NokeDeviceLockState.nokeDeviceLockStateLocked
+                        NokeDeviceManager.shared().delegate?.nokeDeviceDidUpdateState(to: .nokeDeviceConnectionStateLocked, noke: self)
                     }
                     break
                 case Constants.INVALIDDATA_ResultType:
