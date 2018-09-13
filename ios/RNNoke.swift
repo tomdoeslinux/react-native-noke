@@ -104,7 +104,17 @@ class RNNoke : RCTEventEmitter, NokeDeviceManagerDelegate {
         
         resolve(["status": true])
     }
-    
+
+    @objc func setAPIKey(
+        _ key: String,
+        resolver resolve: RCTPromiseResolveBlock,
+        rejecter reject: RCTPromiseRejectBlock
+        ) {
+        NokeDeviceManager.shared().setAPIKey(key)
+        
+        resolve(["status": true])
+    }
+        
     @objc func addNokeDevice(
         _ data: Dictionary<String, String>,
         resolver resolve: RCTPromiseResolveBlock,
