@@ -57,6 +57,40 @@ public class RNNokeModule extends ReactContextBaseJavaModule {
     return event;
   }
 
+  @ReactMethod 
+  private void setApiUrl(String url, Promise promise) {
+    try {
+      if(mNokeService == null) {
+        promise.reject("message", "mNokeService is null");
+        return;
+      }
+      mNokeService.setUploadUrl(url);
+      final WritableMap event = Arguments.createMap();
+      event.putBoolean("status", true);
+
+      promise.resolve(event);
+    } catch (IllegalViewOperationException e) {
+      promise.reject("message", e.getMessage());
+    }
+  }
+
+  @ReactMethod 
+  private void setApiKey(String key, Promise promise) {
+    try {
+      if(mNokeService == null) {
+        promise.reject("message", "mNokeService is null");
+        return;
+      }
+      mNokeService.setApiKey(key);
+      final WritableMap event = Arguments.createMap();
+      event.putBoolean("status", true);
+
+      promise.resolve(event);
+    } catch (IllegalViewOperationException e) {
+      promise.reject("message", e.getMessage());
+    }
+  }
+
   @ReactMethod
   private void initiateNokeService(Promise promise) {
     try {
@@ -253,7 +287,7 @@ public class RNNokeModule extends ReactContextBaseJavaModule {
             case where the mobile app should be making requests to the Noke Core API directly.
              */
 
-      mNokeService.setUploadUrl("https://coreapi-sandbox.appspot.com/upload/");
+      // mNokeService.setUploadUrl("https://coreapi-sandbox.appspot.com/upload/");
 
       //Start bluetooth scanning
       mNokeService.startScanningForNokeDevices();

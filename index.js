@@ -12,6 +12,8 @@ const { RNNoke } = NativeModules
 export default {
   initiateNokeService: RNNoke.initiateNokeService,
   setAPIKey: RNNoke.setAPIKey,
+  setApiKey: RNNoke.setApiKey,
+  setApiUrl: RNNoke.setApiUrl,
   on: onEvent,
   offlineUnlock: RNNoke.offlineUnlock,
   sendCommands: RNNoke.sendCommands,
