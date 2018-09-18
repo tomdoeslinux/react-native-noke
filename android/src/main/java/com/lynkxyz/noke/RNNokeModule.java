@@ -327,6 +327,14 @@ public class RNNokeModule extends ReactContextBaseJavaModule {
     }
 
     @Override
+    public void onNokeLocked(NokeDevice noke) {
+      final WritableMap event = Arguments.createMap();
+      event.putString("name", noke.getName());
+      event.putString("mac", noke.getMac());
+      emitDeviceEvent("onNokeLocked", event);
+    }
+
+    @Override
     public void onNokeDisconnected(NokeDevice noke) {
       final WritableMap event = Arguments.createMap();
       event.putString("name", noke.getName());
