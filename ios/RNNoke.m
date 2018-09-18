@@ -38,7 +38,14 @@ RCT_EXTERN_METHOD(
 
 
 RCT_EXTERN_METHOD(
-                  setAPIKey:(NSString) value 
+                  setApiKey:(NSString) value 
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject
+                  )
+
+
+RCT_EXTERN_METHOD(
+                  setApiUrl:(NSString) value 
                   resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject
                   )

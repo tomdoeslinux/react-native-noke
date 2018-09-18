@@ -105,7 +105,17 @@ class RNNoke : RCTEventEmitter, NokeDeviceManagerDelegate {
         resolve(["status": true])
     }
 
-    @objc func setAPIKey(
+    @objc func setApiUrl(
+        _ url: String,
+        resolver resolve: RCTPromiseResolveBlock,
+        rejecter reject: RCTPromiseRejectBlock
+        ) {
+        NokeDeviceManager.shared().changeDefaultUploadUrl(url)
+        
+        resolve(["status": true])
+    }
+
+    @objc func setApiKey(
         _ key: String,
         resolver resolve: RCTPromiseResolveBlock,
         rejecter reject: RCTPromiseRejectBlock
