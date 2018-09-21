@@ -24,6 +24,7 @@ export default {
   startScan: RNNoke.startScan,
   stopScan: RNNoke.stopScan,
   disconnect: RNNoke.disconnect,
+  connect: RNNoke.connect,
   getDeviceInfo: RNNoke.getDeviceInfo,
   setOfflineData: RNNoke.setOfflineData,
   addNokeDeviceOnce: RNNoke.addNokeDeviceOnce,
