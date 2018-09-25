@@ -13,6 +13,15 @@ export const onEvent = function (eventName, callback) {
   return this
 }
 
+export const offEvent = function (eventName, listener) {
+  NokeEmitter.removeListener(eventName, listener);
+  return this;
+}
+
+export const getEventListeners = function (eventName) {
+  return NokeEmitter.listeners(eventName);
+}
+
 export const fromNokeEvents = () => {
   if (!Observable) return {
     message: 'Missing rxjs'

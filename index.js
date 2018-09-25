@@ -4,7 +4,9 @@ import {
 } from 'react-native'
 import {
   fromNokeEvents,
-  onEvent
+  onEvent,
+  offEvent,
+  getEventListeners
 } from './events'
 
 const { RNNoke } = NativeModules
@@ -14,6 +16,7 @@ export default {
   setApiKey: RNNoke.setApiKey,
   setApiUrl: RNNoke.setApiUrl,
   on: onEvent,
+  off: offEvent,
   offlineUnlock: RNNoke.offlineUnlock,
   sendCommands: RNNoke.sendCommands,
   addNokeDevice(data) {
@@ -29,6 +32,7 @@ export default {
   setOfflineData: RNNoke.setOfflineData,
   addNokeDeviceOnce: RNNoke.addNokeDeviceOnce,
   fromNokeEvents,
+  getEventListeners,
 
   AUTHOR: RNNoke.AUTHOR
 }
