@@ -6,7 +6,13 @@ buildscript {
     dependencies {
         classpath 'com.android.tools.build:gradle:2.3.2'
     }
+
+    configurations.all {
+        resolutionStrategy.cacheDynamicVersionsFor 5, 'minutes'
+        resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
+    }
 }
+
 
 apply plugin: 'com.android.library'
 
@@ -37,5 +43,5 @@ repositories {
 
 dependencies {
     compile 'com.facebook.react:react-native:+'
-    compile 'com.github.petrocloud:noke-mobile-library-android:0.7.0'
+    compile 'com.github.petrocloud:noke-mobile-library-android:master-SNAPSHOT'
 }

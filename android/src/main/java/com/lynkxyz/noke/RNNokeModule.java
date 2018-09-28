@@ -204,11 +204,12 @@ public class RNNokeModule extends ReactContextBaseJavaModule {
     Log.i(TAG, "$$$$$$$$$ daNoke: " + daNoke);
     Log.i(TAG, "$$$$$$$$$ daMAC: " + data.getString("mac"));
     Log.i(TAG, "$$$$$$$$$ daNokeMAC: " + daNoke.getMac());
+    Log.i(TAG, "$$$$$$$$$ currentNoke is : " + currentNoke);
+    Log.i(TAG, "$$$$$$$$$ currentNoke getMac is : " + currentNoke.getMac());
     if(daNoke == null) {
       promise.reject("message", "unable to connect, noke not found");
       return;
     }
-    Log.i(TAG, "$$$$$$$$$ currentNoke is : " + currentNoke);
 
     mNokeService.connectToNoke(daNoke);
 
