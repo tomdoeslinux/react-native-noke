@@ -187,17 +187,30 @@ public class RNNokeModule extends ReactContextBaseJavaModule {
       promise.reject("message", "mNokeService is null");
       return;
     }
-    if(currentNoke != null) { 
-      promise.reject("message", "currentNoke is not null in connect");
+    // if(currentNoke != null) { 
+    //   promise.reject("message", "currentNoke is not null in connect");
+    //   return;
+    // }
+
+    // NokeDevice noke = new NokeDevice(
+    //   data.getString("name"),
+    //   data.getString("mac")
+    // );
+
+    Log.i(TAG, "$$$$$$$$$ nokessss: " + mNokeService.nokeDevices);
+    Log.i(TAG, "$$$$$$$$$ daNokeFound: " + mNokeService.nokeDevices.get(data.getString("mac")));
+
+    NokeDevice daNoke = mNokeService.nokeDevices.get(data.getString("mac"));
+    Log.i(TAG, "$$$$$$$$$ daNoke: " + daNoke);
+    Log.i(TAG, "$$$$$$$$$ daMAC: " + data.getString("mac"));
+    Log.i(TAG, "$$$$$$$$$ daNokeMAC: " + daNoke.getMac());
+    if(daNoke == null) {
+      promise.reject("message", "unable to connect, noke not found");
       return;
     }
+    Log.i(TAG, "$$$$$$$$$ currentNoke is : " + currentNoke);
 
-    NokeDevice noke = new NokeDevice(
-      data.getString("name"),
-      data.getString("mac")
-    );
-
-    mNokeService.connectToNoke(noke);
+    mNokeService.connectToNoke(daNoke);
 
     final WritableMap event = Arguments.createMap();
     event.putBoolean("status", true);
@@ -286,10 +299,10 @@ public class RNNokeModule extends ReactContextBaseJavaModule {
   private ServiceConnection mServiceConnection = new ServiceConnection() {
 
     public void onServiceConnected(ComponentName className, IBinder rawBinder) {
-      final WritableMap initEvent = Arguments.createMap();
-      initEvent.putString("message", "On service connected");
-      initEvent.putBoolean("status", true);
-      emitDeviceEvent("onServiceConnected", initEvent);
+      // final WritableMap initEvent = Arguments.createMap();
+      // initEvent.putString("message", "On service connected");
+      // initEvent.putBoolean("status", true);
+      // emitDeviceEvent("onServiceConnected", initEvent);
 
       Log.w(TAG, "ON SERVICE CONNECTED");
 
@@ -315,7 +328,7 @@ public class RNNokeModule extends ReactContextBaseJavaModule {
       //Start bluetooth scanning
       // mNokeService.startScanningForNokeDevices(); //////////////
       // String message = "Scanning for Noke Devices"; ////////////////
-      String message = "service is connected"; ////////////////
+      String message = "Service is connected"; ////////////////
 
 
       if (!mNokeService.initialize()) {
@@ -338,11 +351,16 @@ public class RNNokeModule extends ReactContextBaseJavaModule {
 
   private NokeServiceListener mNokeServiceListener = new NokeServiceListener() {
     @Override
-    public void onNokeDiscovered(NokeDevice noke) {
+    public void onNokeDiscovered(NokeDevice noke) { // can we do some getVluetooth settings here?
+      
+      Log.i(TAG, "$$$$$$ discoveredNoke: " + noke);
       final WritableMap event = Arguments.createMap();
       event.putString("name", noke.getName());
       event.putString("mac", noke.getMac());
       emitDeviceEvent("onNokeDiscovered", event);
+      if(currentNoke == null) {
+        currentNoke = noke;
+      }
       // mNokeService.connectToNoke(noke);  ////////////////
     }
 
