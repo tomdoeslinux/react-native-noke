@@ -92,6 +92,57 @@ public class RNNokeModule extends ReactContextBaseJavaModule {
   }
 
   @ReactMethod
+  private void setBluetoothDelayDefault(int delay, Promise promise) {
+    try {
+      if(mNokeService == null) {
+        promise.reject("message", "mNokeService is null");
+        return;
+      }
+      mNokeService.setBluetoothDelayDefault(delay);
+      final WritableMap event = Arguments.createMap();
+      event.putBoolean("status", true);
+
+      promise.resolve(event);
+    } catch (IllegalViewOperationException e) {
+      promise.reject("message", e.getMessage());
+    }
+  }
+
+  @ReactMethod
+  private void setBluetoothDelayBackgroundDefault(int delay, Promise promise) {
+    try {
+      if(mNokeService == null) {
+        promise.reject("message", "mNokeService is null");
+        return;
+      }
+      mNokeService.setBluetoothDelayBackgroundDefault(delay);
+      final WritableMap event = Arguments.createMap();
+      event.putBoolean("status", true);
+
+      promise.resolve(event);
+    } catch (IllegalViewOperationException e) {
+      promise.reject("message", e.getMessage());
+    }
+  }
+
+  @ReactMethod
+  private void setBluetoothScanDuration(int duration, Promise promise) {
+    try {
+      if(mNokeService == null) {
+        promise.reject("message", "mNokeService is null");
+        return;
+      }
+      mNokeService.setBluetoothScanDuration(duration);
+      final WritableMap event = Arguments.createMap();
+      event.putBoolean("status", true);
+
+      promise.resolve(event);
+    } catch (IllegalViewOperationException e) {
+      promise.reject("message", e.getMessage());
+    }
+  }
+
+  @ReactMethod
   private void initiateNokeService(Promise promise) {
     try {
       Intent nokeServiceIntent = new Intent(reactContext, NokeDeviceManagerService.class);
