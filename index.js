@@ -5,6 +5,7 @@ import {
 import {
   fromNokeEvents,
   onEvent,
+  onEventOnce,
   offEvent,
   getEventListeners
 } from './events'
@@ -19,6 +20,7 @@ export default {
   setBluetoothDelayBackgroundDefault: RNNoke.setBluetoothDelayBackgroundDefault,
   setBluetoothScanDuration: RNNoke.setBluetoothScanDuration,
   on: onEvent,
+  once: onEventOnce,
   off: offEvent,
   offlineUnlock: RNNoke.offlineUnlock,
   sendCommands: RNNoke.sendCommands,

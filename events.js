@@ -13,6 +13,11 @@ export const onEvent = function (eventName, callback) {
   return this
 }
 
+export const onEventOnce = function (eventName, callback) {
+  NokeEmitter.once(eventName, callback)
+  return this
+}
+
 export const offEvent = function (eventName, listener) {
   NokeEmitter.removeListener(eventName, listener);
   return this;

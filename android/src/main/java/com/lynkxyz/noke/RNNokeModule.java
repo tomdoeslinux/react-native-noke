@@ -238,25 +238,9 @@ public class RNNokeModule extends ReactContextBaseJavaModule {
       promise.reject("message", "mNokeService is null");
       return;
     }
-    // if(currentNoke != null) { 
-    //   promise.reject("message", "currentNoke is not null in connect");
-    //   return;
-    // }
-
-    // NokeDevice noke = new NokeDevice(
-    //   data.getString("name"),
-    //   data.getString("mac")
-    // );
-
-    Log.i(TAG, "$$$$$$$$$ nokessss: " + mNokeService.nokeDevices);
-    Log.i(TAG, "$$$$$$$$$ daNokeFound: " + mNokeService.nokeDevices.get(data.getString("mac")));
 
     NokeDevice daNoke = mNokeService.nokeDevices.get(data.getString("mac"));
     Log.i(TAG, "$$$$$$$$$ daNoke: " + daNoke);
-    Log.i(TAG, "$$$$$$$$$ daMAC: " + data.getString("mac"));
-    Log.i(TAG, "$$$$$$$$$ daNokeMAC: " + daNoke.getMac());
-    Log.i(TAG, "$$$$$$$$$ currentNoke is : " + currentNoke);
-    Log.i(TAG, "$$$$$$$$$ currentNoke getMac is : " + currentNoke.getMac());
     if(daNoke == null) {
       promise.reject("message", "unable to connect, noke not found");
       return;
@@ -410,10 +394,7 @@ public class RNNokeModule extends ReactContextBaseJavaModule {
       event.putString("name", noke.getName());
       event.putString("mac", noke.getMac());
       emitDeviceEvent("onNokeDiscovered", event);
-      if(currentNoke == null) {
-        currentNoke = noke;
-      }
-      // mNokeService.connectToNoke(noke);  ////////////////
+      
     }
 
     @Override
