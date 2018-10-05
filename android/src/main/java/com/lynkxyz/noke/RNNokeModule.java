@@ -19,6 +19,7 @@ import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
 
 import com.facebook.react.uimanager.IllegalViewOperationException;
+import com.noke.nokemobilelibrary.NokeDefines;
 import com.noke.nokemobilelibrary.NokeDevice;
 import com.noke.nokemobilelibrary.NokeDeviceManagerService;
 import com.noke.nokemobilelibrary.NokeMobileError;
@@ -64,7 +65,7 @@ public class RNNokeModule extends ReactContextBaseJavaModule {
         promise.reject("message", "mNokeService is null");
         return;
       }
-      mNokeService.setUploadUrl(url);
+      // mNokeService.setUploadUrl(url);
       final WritableMap event = Arguments.createMap();
       event.putBoolean("status", true);
 
@@ -343,7 +344,7 @@ public class RNNokeModule extends ReactContextBaseJavaModule {
       Log.w(TAG, "ON SERVICE CONNECTED");
 
       //Store reference to service
-      mNokeService = ((NokeDeviceManagerService.LocalBinder) rawBinder).getService();
+      mNokeService = ((NokeDeviceManagerService.LocalBinder) rawBinder).getService(NokeDefines.NOKE_LIBRARY_SANDBOX);
 
       //Uncomment to allow devices that aren't in the device array
       mNokeService.setAllowAllDevices(true);
@@ -453,6 +454,16 @@ public class RNNokeModule extends ReactContextBaseJavaModule {
       currentNoke = null;
       mNokeService.uploadData();
       // mNokeService.startScanningForNokeDevices();  /////////////////
+    }
+
+    @Override
+    public void onNokeShutdown(NokeDevice noke, Boolean isLocked, Boolean didTimeout) {
+      final WritableMap event = Arguments.createMap();
+      event.putString("name", noke.getName());
+      event.putString("mac", noke.getMac());
+      event.putBoolean("isLocked", isLocked);
+      event.putBoolean("didTimeout", didTimeout);
+      emitDeviceEvent("onNokeShutdown", event);
     }
 
     @Override

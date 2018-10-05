@@ -40,6 +40,7 @@ export const fromNokeEvents = () => {
     'onNokeSyncing',
     'onNokeUnlocked',
     'onNokeDisconnected',
+    'onNokeShutdown',
     'onBluetoothStatusChanged',
     'onError'
   ]
@@ -114,6 +115,14 @@ export const fromNokeEvents = () => {
         data
       })
       lastEvent = 'onNokeDisconnected'
+    })
+
+    onEvent('onNokeShutdown', data => {
+      observer.next({
+        name: 'onNokeShutdown',
+        data
+      })
+      lastEvent = 'onNokeShutdown'
     })
 
     onEvent('onError', data => {
