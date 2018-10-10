@@ -232,7 +232,7 @@ public class RNNokeModule extends ReactContextBaseJavaModule {
     }
   }
 
-  @ReactMethod  /////////////////
+  @ReactMethod  
   public void connect(ReadableMap data, Promise promise) {
     if(mNokeService == null) {
       promise.reject("message", "mNokeService is null");
@@ -251,7 +251,7 @@ public class RNNokeModule extends ReactContextBaseJavaModule {
     final WritableMap event = Arguments.createMap();
     event.putBoolean("status", true);
     promise.resolve(event);
-  }   ////////////////////////
+  }   
 
   @ReactMethod
   public void disconnect(Promise promise) {
@@ -359,12 +359,7 @@ public class RNNokeModule extends ReactContextBaseJavaModule {
             case where the mobile app should be making requests to the Noke Core API directly.
              */
 
-      // mNokeService.setUploadUrl("https://coreapi-sandbox.appspot.com/upload/");
-
-      //Start bluetooth scanning
-      // mNokeService.startScanningForNokeDevices(); //////////////
-      // String message = "Scanning for Noke Devices"; ////////////////
-      String message = "Service is connected"; ////////////////
+      String message = "Service is connected"; 
 
 
       if (!mNokeService.initialize()) {
@@ -414,7 +409,6 @@ public class RNNokeModule extends ReactContextBaseJavaModule {
       event.putString("session", noke.getSession());
       event.putInt("battery", noke.getBattery());
       emitDeviceEvent("onNokeConnected", event);
-      // mNokeService.stopScanning();  ////////////////
     }
 
     @Override
@@ -452,7 +446,6 @@ public class RNNokeModule extends ReactContextBaseJavaModule {
       emitDeviceEvent("onNokeDisconnected", event);
       currentNoke = null;
       mNokeService.uploadData();
-      // mNokeService.startScanningForNokeDevices();  /////////////////
     }
 
     @Override
