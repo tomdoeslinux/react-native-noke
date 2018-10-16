@@ -1,57 +1,20 @@
 {
-  "_args": [
-    [
-      "github:PetroCloud/react-native-noke",
-      "/home/paul/Documents/Minutiae/noke-mobile"
-    ]
-  ],
-  "_from": "github:PetroCloud/react-native-noke",
-  "_id": "react-native-noke@github:PetroCloud/react-native-noke#c389738a7b760607741ebbd74fcc4fbbf98633e0",
-  "_inBundle": false,
-  "_integrity": "",
-  "_location": "/react-native-noke",
-  "_phantomChildren": {},
-  "_requested": {
-    "type": "git",
-    "raw": "github:PetroCloud/react-native-noke",
-    "rawSpec": "github:PetroCloud/react-native-noke",
-    "saveSpec": "github:PetroCloud/react-native-noke",
-    "fetchSpec": null,
-    "gitCommittish": null
-  },
-  "_requiredBy": [
-    "/"
-  ],
-  "_resolved": "github:PetroCloud/react-native-noke#c389738a7b760607741ebbd74fcc4fbbf98633e0",
-  "_spec": "github:PetroCloud/react-native-noke",
-  "_where": "/home/paul/Documents/Minutiae/noke-mobile",
-  "author": {
-    "name": "Ant-Tech Ltd."
-  },
-  "bugs": {
-    "url": "https://github.com/Ant-Tech-Agency/react-native-noke/issues"
-  },
+  "name": "react-native-noke",
+  "version": "2.0.0",
   "description": "Noke SDK for React-Native",
-  "homepage": "https://github.com/Ant-Tech-Agency/react-native-noke#readme",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
   "keywords": [
     "react-native",
     "noke",
     "padlock"
   ],
+  "author": "Ant-Tech Ltd.",
   "license": "",
-  "main": "index.js",
-  "name": "react-native-noke",
+  "repository": "https://github.com/Ant-Tech-Agency/react-native-noke",
   "peerDependencies": {
-    "react-native": "^0.41.2",
-    "rxjs": "6.2.2",
-    "rxjs-compat": "6.2.2"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Ant-Tech-Agency/react-native-noke.git"
-  },
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "version": "1.5.0"
+    "react-native": "^0.41.2"
+  }
 }
