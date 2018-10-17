@@ -8,8 +8,6 @@ class RNNoke : RCTEventEmitter, NokeDeviceManagerDelegate {
         switch state {
             
         case .nokeDeviceConnectionStateDiscovered:
-            NokeDeviceManager.shared().stopScan()
-            NokeDeviceManager.shared().connectToNokeDevice(noke)
             
             sendEvent(withName: "onNokeDiscovered", body: ["name": noke.name, "mac": noke.mac])
             break
@@ -27,13 +25,8 @@ class RNNoke : RCTEventEmitter, NokeDeviceManagerDelegate {
             
             sendEvent(withName: "onNokeUnlocked", body: ["name": noke.name, "mac": noke.mac])
             break
-        case .nokeDeviceConnectionStateLocked:
-        
-            sendEvent(withName: "onNokeLocked", body: ["name": noke.name, "mac": noke.mac])
-            break
         case .nokeDeviceConnectionStateDisconnected:
             NokeDeviceManager.shared().cacheUploadQueue()
-            NokeDeviceManager.shared().startScanForNokeDevices()
             currentNoke = nil
             
             sendEvent(withName: "onNokeDisconnected", body: ["name": noke.name, "mac": noke.mac])
@@ -44,10 +37,18 @@ class RNNoke : RCTEventEmitter, NokeDeviceManagerDelegate {
             break
         }
     }
+
+    func nokeDeviceDidShutdown(noke: NokeDevice, isLocked: Bool, didTimeout: Bool) { 
+        sendEvent(withName: "onNokeShutdown", body: ["name": noke.name, "mac": noke.mac, "isLocked": isLocked, "didTimeout": didTimeout])
+    }
     
     func nokeErrorDidOccur(error: NokeDeviceManagerError, message: String, noke: NokeDevice?) {
         debugPrint("NOKE MANAGER ON")
         sendEvent(withName: "onError", body: ["code": 0,"mesage": message])
+    }
+
+    func didUploadData(result: Int, message: String) { 
+        // TODO
     }
     
     func bluetoothManagerDidUpdateState(state: NokeManagerBluetoothState) {
@@ -105,16 +106,6 @@ class RNNoke : RCTEventEmitter, NokeDeviceManagerDelegate {
         resolve(["status": true])
     }
 
-    @objc func setApiUrl(
-        _ url: String,
-        resolver resolve: RCTPromiseResolveBlock,
-        rejecter reject: RCTPromiseRejectBlock
-        ) {
-        NokeDeviceManager.shared().changeDefaultUploadUrl(url)
-        
-        resolve(["status": true])
-    }
-
     @objc func setApiKey(
         _ key: String,
         resolver resolve: RCTPromiseResolveBlock,
@@ -164,6 +155,16 @@ class RNNoke : RCTEventEmitter, NokeDeviceManagerDelegate {
         
         resolve(["name": currentNoke?.name, "mac": currentNoke?.mac])
     }
+
+    @objc func connect(  
+        _ data: Dictionary<String, String>,
+        resolver resolve: RCTPromiseResolveBlock,
+        rejecter reject: RCTPromiseRejectBlock
+        ) {
+        var daNoke: NokeDevice? = NokeDeviceManager.shared().nokeWithMac(data["mac"]!)  
+        NokeDeviceManager.shared().connectToNokeDevice(daNoke!)
+        resolve(["status": true])
+    }  
     
     @objc func disconnect(
         _ resolve: RCTPromiseResolveBlock,
@@ -233,6 +234,7 @@ class RNNoke : RCTEventEmitter, NokeDeviceManagerDelegate {
             "onNokeUnlocked",
             "onNokeLocked",
             "onNokeDisconnected",
+            "onNokeShutdown",
             "onBluetoothStatusChanged",
             "onError"
         ]

@@ -5,6 +5,7 @@
 //  Created by Spencer Apsley on 1/15/18.
 //  Copyright © 2018 Noke. All rights reserved.
 //
+
 import UIKit
 
 //Error codes for API, Go Library, and Noke Device
@@ -37,7 +38,15 @@ public enum NokeDeviceManagerError : Int {
     
     //Noke Mobile Library Errors
     case nokeLibraryErrorInvalidOfflineKey  = 301
+    case nokeLibraryErrorNoModeSet          = 302
 }
+
+public enum NokeLibraryMode : Int {
+    case SANDBOX      = 0;
+    case PRODUCTION   = 1;
+    case DEVELOP      = 2;
+}
+
 
 //Defines used when interacting with the lock
 struct Constants {
@@ -138,3 +147,11 @@ struct Constants {
     static let OFFLINE_KEY_LENGTH =  32
     static let OFFLINE_COMMAND_LENGTH = 40
 }
+
+struct ApiURL {
+    static let sandboxUploadURL         = "https://coreapi-sandbox.appspot.com/"
+    static let productionUploadURL      = "https://coreapi-beta.appspot.com/"
+    static let developUploadURL         = "https://lock-api-dev.appspot.com/"
+}
+
+
