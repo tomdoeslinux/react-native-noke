@@ -98,11 +98,31 @@ class RNNoke : RCTEventEmitter, NokeDeviceManagerDelegate {
     }
     
     @objc func initiateNokeService(
-        _ resolve: RCTPromiseResolveBlock,
+        _ code: Int, 
+        resolver resolve: RCTPromiseResolveBlock,
         rejecter reject: RCTPromiseRejectBlock
         ) {
         NokeDeviceManager.shared().delegate = self
+
+        var mode: NokeLibraryMode = NokeLibraryMode.SANDBOX
         
+        switch code {
+        case 0:
+            mode = NokeLibraryMode.SANDBOX
+            break
+        case 1: 
+            mode = NokeLibraryMode.PRODUCTION
+            break
+        case 2: 
+            mode = NokeLibraryMode.DEVELOP
+            break
+        default:
+            mode = NokeLibraryMode.SANDBOX
+            break
+        }
+
+        NokeDeviceManager.shared().setLibraryMode(mode)
+
         resolve(["status": true])
     }
 

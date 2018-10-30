@@ -15,7 +15,6 @@ const { RNNoke } = NativeModules
 export default {
   initiateNokeService: RNNoke.initiateNokeService,
   setApiKey: RNNoke.setApiKey,
-  setApiUrl: RNNoke.setApiUrl,
   setBluetoothDelayDefault: RNNoke.setBluetoothDelayDefault,
   setBluetoothDelayBackgroundDefault: RNNoke.setBluetoothDelayBackgroundDefault,
   setBluetoothScanDuration: RNNoke.setBluetoothScanDuration,

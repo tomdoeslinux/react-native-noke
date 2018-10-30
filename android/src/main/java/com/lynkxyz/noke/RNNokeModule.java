@@ -37,6 +37,8 @@ public class RNNokeModule extends ReactContextBaseJavaModule {
   private NokeDeviceManagerService mNokeService = null;
   private NokeDevice currentNoke;
 
+  private Integer nokeLibraryMode = 0;
+
   public RNNokeModule(ReactApplicationContext context) {
     // Pass in the context to the constructor and save it so you can emit events
     // https://facebook.github.io/react-native/docs/native-modules-android.html#the-toast-module
@@ -56,23 +58,6 @@ public class RNNokeModule extends ReactContextBaseJavaModule {
     event.putString("mac", nokeDevice.getMac());
 
     return event;
-  }
-
-  @ReactMethod 
-  private void setApiUrl(String url, Promise promise) {
-    try {
-      if(mNokeService == null) {
-        promise.reject("message", "mNokeService is null");
-        return;
-      }
-      // mNokeService.setUploadUrl(url);
-      final WritableMap event = Arguments.createMap();
-      event.putBoolean("status", true);
-
-      promise.resolve(event);
-    } catch (IllegalViewOperationException e) {
-      promise.reject("message", e.getMessage());
-    }
   }
 
   @ReactMethod 
@@ -144,9 +129,10 @@ public class RNNokeModule extends ReactContextBaseJavaModule {
   }
 
   @ReactMethod
-  private void initiateNokeService(Promise promise) {
+  private void initiateNokeService(int mode, Promise promise) {  
     try {
       Intent nokeServiceIntent = new Intent(reactContext, NokeDeviceManagerService.class);
+      nokeLibraryMode = mode;
       reactContext.bindService(nokeServiceIntent, mServiceConnection, Context.BIND_AUTO_CREATE);
       WritableMap event = Arguments.createMap();
       event.putBoolean("status", true);
@@ -233,7 +219,7 @@ public class RNNokeModule extends ReactContextBaseJavaModule {
     }
   }
 
-  @ReactMethod  /////////////////
+  @ReactMethod
   public void connect(ReadableMap data, Promise promise) {
     if(mNokeService == null) {
       promise.reject("message", "mNokeService is null");
@@ -241,7 +227,6 @@ public class RNNokeModule extends ReactContextBaseJavaModule {
     }
 
     NokeDevice daNoke = mNokeService.nokeDevices.get(data.getString("mac"));
-    Log.i(TAG, "$$$$$$$$$ daNoke: " + daNoke);
     if(daNoke == null) {
       promise.reject("message", "unable to connect, noke not found");
       return;
@@ -252,7 +237,7 @@ public class RNNokeModule extends ReactContextBaseJavaModule {
     final WritableMap event = Arguments.createMap();
     event.putBoolean("status", true);
     promise.resolve(event);
-  }   ////////////////////////
+  } 
 
   @ReactMethod
   public void disconnect(Promise promise) {
@@ -336,15 +321,10 @@ public class RNNokeModule extends ReactContextBaseJavaModule {
   private ServiceConnection mServiceConnection = new ServiceConnection() {
 
     public void onServiceConnected(ComponentName className, IBinder rawBinder) {
-      // final WritableMap initEvent = Arguments.createMap();
-      // initEvent.putString("message", "On service connected");
-      // initEvent.putBoolean("status", true);
-      // emitDeviceEvent("onServiceConnected", initEvent);
-
       Log.w(TAG, "ON SERVICE CONNECTED");
 
       //Store reference to service
-      mNokeService = ((NokeDeviceManagerService.LocalBinder) rawBinder).getService(NokeDefines.NOKE_LIBRARY_SANDBOX);
+      mNokeService = ((NokeDeviceManagerService.LocalBinder) rawBinder).getService(nokeLibraryMode);
 
       //Uncomment to allow devices that aren't in the device array
       mNokeService.setAllowAllDevices(true);
@@ -352,20 +332,7 @@ public class RNNokeModule extends ReactContextBaseJavaModule {
       //Register callback listener
       mNokeService.registerNokeListener(mNokeServiceListener);
 
-      //Add locks to device manager
-
-
-            /*
-            Sets the url to use for uploading responses from the lock to the API.  This is the only
-            case where the mobile app should be making requests to the Noke Core API directly.
-             */
-
-      // mNokeService.setUploadUrl("https://coreapi-sandbox.appspot.com/upload/");
-
-      //Start bluetooth scanning
-      // mNokeService.startScanningForNokeDevices(); //////////////
-      // String message = "Scanning for Noke Devices"; ////////////////
-      String message = "Service is connected"; ////////////////
+      String message = "Service is connected"; 
 
 
       if (!mNokeService.initialize()) {
@@ -388,9 +355,7 @@ public class RNNokeModule extends ReactContextBaseJavaModule {
 
   private NokeServiceListener mNokeServiceListener = new NokeServiceListener() {
     @Override
-    public void onNokeDiscovered(NokeDevice noke) { // can we do some getVluetooth settings here?
-      
-      Log.i(TAG, "$$$$$$ discoveredNoke: " + noke);
+    public void onNokeDiscovered(NokeDevice noke) {
       final WritableMap event = Arguments.createMap();
       event.putString("name", noke.getName());
       event.putString("mac", noke.getMac());
@@ -415,7 +380,6 @@ public class RNNokeModule extends ReactContextBaseJavaModule {
       event.putString("session", noke.getSession());
       event.putInt("battery", noke.getBattery());
       emitDeviceEvent("onNokeConnected", event);
-      // mNokeService.stopScanning();  ////////////////
     }
 
     @Override
@@ -453,7 +417,6 @@ public class RNNokeModule extends ReactContextBaseJavaModule {
       emitDeviceEvent("onNokeDisconnected", event);
       currentNoke = null;
       mNokeService.uploadData();
-      // mNokeService.startScanningForNokeDevices();  /////////////////
     }
 
     @Override
@@ -476,7 +439,6 @@ public class RNNokeModule extends ReactContextBaseJavaModule {
       final WritableMap event = Arguments.createMap();
       event.putInt("code", bluetoothStatus);
       emitDeviceEvent("onBluetoothStatusChanged", event);
-      // why was mNokeService.startScanningForNokeDevices(); not here like ios? only for bluetooth.on?
     }
 
     @Override
