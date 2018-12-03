@@ -219,7 +219,7 @@ public class RNNokeModule extends ReactContextBaseJavaModule {
     }
   }
 
-  @ReactMethod
+  @ReactMethod  
   public void connect(ReadableMap data, Promise promise) {
     if(mNokeService == null) {
       promise.reject("message", "mNokeService is null");
@@ -237,7 +237,7 @@ public class RNNokeModule extends ReactContextBaseJavaModule {
     final WritableMap event = Arguments.createMap();
     event.putBoolean("status", true);
     promise.resolve(event);
-  } 
+  }   
 
   @ReactMethod
   public void disconnect(Promise promise) {
@@ -333,7 +333,6 @@ public class RNNokeModule extends ReactContextBaseJavaModule {
       mNokeService.registerNokeListener(mNokeServiceListener);
 
       String message = "Service is connected"; 
-
 
       if (!mNokeService.initialize()) {
         Log.e(TAG, "Unable to initialize Bluetooth");
