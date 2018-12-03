@@ -1,35 +1,37 @@
-import { debounce } from 'lodash'
+import { debounce } from 'lodash';
 import {
   NativeEventEmitter,
   NativeModules
-} from 'react-native'
-import { Observable } from 'rxjs/Observable'
+} from 'react-native';
+import { Observable } from 'rxjs/Observable';
 
-const { RNNoke } = NativeModules
-const NokeEmitter = new NativeEventEmitter(RNNoke)
+const { RNNoke } = NativeModules;
+const NokeEmitter = new NativeEventEmitter(RNNoke);
 
 export const onEvent = function (eventName, callback) {
-  NokeEmitter.addListener(eventName, callback)
-  return this
-}
+  NokeEmitter.addListener(eventName, callback);
+  return this;
+};
 
 export const onEventOnce = function (eventName, callback) {
-  NokeEmitter.once(eventName, callback)
-  return this
-}
+  NokeEmitter.once(eventName, callback);
+  return this;
+};
 
 export const offEvent = function (eventName, listener) {
   NokeEmitter.removeListener(eventName, listener);
   return this;
-}
+};
 
 export const getEventListeners = function (eventName) {
   return NokeEmitter.listeners(eventName);
-}
+};
 
 export const fromNokeEvents = () => {
-  if (!Observable) return {
-    message: 'Missing rxjs'
+  if (!Observable) {
+    return {
+      message: 'Missing rxjs'
+    };
   }
 
   const events = [
@@ -43,94 +45,77 @@ export const fromNokeEvents = () => {
     'onNokeShutdown',
     'onBluetoothStatusChanged',
     'onError'
-  ]
+  ];
 
-  let timer = null
-  let lastEvent = ''
+  let lastEvent = '';
 
   return Observable.create(observer => {
     onEvent('onNokeDiscovered', data => {
       observer.next({
         name: 'onNokeDiscovered',
         data
-      })
-      lastEvent = 'onNokeDiscovered'
-    })
+      });
+      lastEvent = 'onNokeDiscovered';
+    });
 
     onEvent('onNokeConnecting', data => {
       observer.next({
         name: 'onNokeConnecting',
         data
-      })
-      lastEvent = 'onNokeConnecting'
-
-      //timer = setTimeout(() => {
-      //  observer.next({
-      //    name: 'onNokeDisconnected',
-      //    data
-      //  })
-      //  lastEvent = 'onNokeDisconnected'
-      //}, 5000)
-    })
+      });
+      lastEvent = 'onNokeConnecting';
+    });
 
     onEvent('onNokeConnected', data => {
       //clearTimeout(timer)
-      if(lastEvent !== 'onNokeUnlocked') {
+      if (lastEvent !== 'onNokeUnlocked') {
         observer.next({
           name: 'onNokeConnected',
           data
-        })
-        lastEvent = 'onNokeConnected'
+        });
+        lastEvent = 'onNokeConnected';
       }
-    })
+    });
 
     onEvent('onNokeSyncing', data => {
       observer.next({
         name: 'onNokeSyncing',
         data
-      })
-      lastEvent = 'onNokeSyncing'
-
-      //timer = setTimeout(() => {
-      //  observer.next({
-      //    name: 'onNokeDisconnected',
-      //    data
-      //  })
-      //  lastEvent = 'onNokeDisconnected'
-      //}, 1500)
-    })
+      });
+      lastEvent = 'onNokeSyncing';
+    });
 
     onEvent('onNokeUnlocked', data => {
       //clearTimeout(timer)
       observer.next({
         name: 'onNokeUnlocked',
         data
-      })
-      lastEvent = 'onNokeUnlocked'
-    })
+      });
+      lastEvent = 'onNokeUnlocked';
+    });
 
     onEvent('onNokeDisconnected', data => {
       observer.next({
         name: 'onNokeDisconnected',
         data
-      })
-      lastEvent = 'onNokeDisconnected'
-    })
+      });
+      lastEvent = 'onNokeDisconnected';
+    });
 
     onEvent('onNokeShutdown', data => {
       observer.next({
         name: 'onNokeShutdown',
         data
-      })
-      lastEvent = 'onNokeShutdown'
-    })
+      });
+      lastEvent = 'onNokeShutdown';
+    });
 
     onEvent('onError', data => {
       observer.next({
         name: 'onError',
         data
-      })
-      lastEvent = 'onError'
+      });
+      lastEvent = 'onError';
     })
 
   })
