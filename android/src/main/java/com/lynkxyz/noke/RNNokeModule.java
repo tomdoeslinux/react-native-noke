@@ -60,7 +60,7 @@ public class RNNokeModule extends ReactContextBaseJavaModule {
     return event;
   }
 
-  @ReactMethod 
+  @ReactMethod
   private void setApiKey(String key, Promise promise) {
     try {
       if(mNokeService == null) {
@@ -129,7 +129,7 @@ public class RNNokeModule extends ReactContextBaseJavaModule {
   }
 
   @ReactMethod
-  private void initiateNokeService(int mode, Promise promise) {  
+  private void initiateNokeService(int mode, Promise promise) {
     try {
       Intent nokeServiceIntent = new Intent(reactContext, NokeDeviceManagerService.class);
       nokeLibraryMode = mode;
@@ -219,7 +219,7 @@ public class RNNokeModule extends ReactContextBaseJavaModule {
     }
   }
 
-  @ReactMethod  
+  @ReactMethod
   public void connect(ReadableMap data, Promise promise) {
     if(mNokeService == null) {
       promise.reject("message", "mNokeService is null");
@@ -237,7 +237,7 @@ public class RNNokeModule extends ReactContextBaseJavaModule {
     final WritableMap event = Arguments.createMap();
     event.putBoolean("status", true);
     promise.resolve(event);
-  }   
+  }
 
   @ReactMethod
   public void disconnect(Promise promise) {
@@ -332,7 +332,7 @@ public class RNNokeModule extends ReactContextBaseJavaModule {
       //Register callback listener
       mNokeService.registerNokeListener(mNokeServiceListener);
 
-      String message = "Service is connected"; 
+      String message = "Service is connected";
 
       if (!mNokeService.initialize()) {
         Log.e(TAG, "Unable to initialize Bluetooth");
@@ -360,7 +360,7 @@ public class RNNokeModule extends ReactContextBaseJavaModule {
       event.putString("mac", noke.getMac());
       event.putString("hwVersion", noke.getVersion());
       emitDeviceEvent("onNokeDiscovered", event);
-      
+
     }
 
     @Override
@@ -400,14 +400,6 @@ public class RNNokeModule extends ReactContextBaseJavaModule {
       event.putString("mac", noke.getMac());
       event.putString("session", noke.getSession());
       emitDeviceEvent("onNokeUnlocked", event);
-    }
-
-    @Override
-    public void onNokeLocked(NokeDevice noke) {
-      final WritableMap event = Arguments.createMap();
-      event.putString("name", noke.getName());
-      event.putString("mac", noke.getMac());
-      emitDeviceEvent("onNokeLocked", event);
     }
 
     @Override
