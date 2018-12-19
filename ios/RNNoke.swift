@@ -47,8 +47,8 @@ class RNNoke : RCTEventEmitter, NokeDeviceManagerDelegate {
         var mac: String = "",
             name: String = ""
         if(noke != nil) {
-            mac = noke.mac
-            name = noke.name
+            mac = (noke?.mac)!
+            name = (noke?.name)!
         }
         sendEvent(withName: "onError", body: ["name": name, "mac": mac, "code": error, "mesage": message])
     }
@@ -158,7 +158,7 @@ class RNNoke : RCTEventEmitter, NokeDeviceManagerDelegate {
             mac: data["mac"]! as String
         )
 
-        noke??.setOfflineValues(
+        noke?.setOfflineValues(
             key: data["key"]! as String,
             command: data["cmd"]! as String
         )
