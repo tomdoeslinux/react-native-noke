@@ -44,7 +44,13 @@ class RNNoke : RCTEventEmitter, NokeDeviceManagerDelegate {
 
     func nokeErrorDidOccur(error: NokeDeviceManagerError, message: String, noke: NokeDevice?) {
         debugPrint("NOKE MANAGER ON")
-        sendEvent(withName: "onError", body: ["code": 0,"mesage": message])
+        var mac: String = "",
+            name: String = ""
+        if(noke != nil) {
+            mac = noke.mac
+            name = noke.name
+        }
+        sendEvent(withName: "onError", body: ["name": noke.name, "mac": noke.mac, "code": error, "mesage": message])
     }
 
     func didUploadData(result: Int, message: String) {
@@ -152,7 +158,7 @@ class RNNoke : RCTEventEmitter, NokeDeviceManagerDelegate {
             mac: data["mac"]! as String
         )
 
-        noke?.setOfflineValues(
+        noke??.setOfflineValues(
             key: data["key"]! as String,
             command: data["cmd"]! as String
         )
