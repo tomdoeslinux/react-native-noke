@@ -452,7 +452,7 @@ public class RNNokeModule extends ReactContextBaseJavaModule {
       event.putInt("code", error);
       String mac = "";
       String name = "";
-      if (noke) {
+      if (noke != null) {
         mac = noke.getMac();
         name = noke.getName();
       }
