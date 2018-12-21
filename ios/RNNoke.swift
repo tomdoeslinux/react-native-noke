@@ -50,7 +50,7 @@ class RNNoke : RCTEventEmitter, NokeDeviceManagerDelegate {
             mac = noke.mac
             name = noke.name
         }
-        sendEvent(withName: "onError", body: ["name": name, "mac": mac, "code": error, "mesage": message])
+        sendEvent(withName: "onError", body: ["name": name, "mac": mac, "code": error, "message": message])
     }
 
     func didUploadData(result: Int, message: String) {
