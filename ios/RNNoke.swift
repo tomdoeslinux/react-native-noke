@@ -9,7 +9,7 @@ class RNNoke : RCTEventEmitter, NokeDeviceManagerDelegate {
 
         case .nokeDeviceConnectionStateDiscovered:
 
-            sendEvent(withName: "onNokeDiscovered", body: ["name": noke.name, "mac": noke.mac, "hwVersion": noke.version])
+            sendEvent(withName: "onNokeDiscovered", body: ["name": noke.name, "mac": noke.mac, "hwVersion": noke.version, "lockState": noke.lockState, "connectionState": noke.connectionState])
             break
         case .nokeDeviceConnectionStateConnected:
             print(noke.session!)
