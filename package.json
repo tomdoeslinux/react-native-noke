@@ -1,6 +1,6 @@
 {
   "name": "react-native-noke",
-  "version": "3.0.8",
+  "version": "3.0.9",
   "description": "Noke SDK for React-Native",
   "main": "index.js",
   "scripts": {
@@ -13,7 +13,7 @@
   ],
   "author": "Ant-Tech Ltd.",
   "license": "",
-  "repository": "https://github.com/Ant-Tech-Agency/react-native-noke",
+  "repository": "https://github.com/PetroCloud/react-native-noke",
   "peerDependencies": {
     "react-native": "^0.41.2"
   }
