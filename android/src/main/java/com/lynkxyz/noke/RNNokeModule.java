@@ -359,8 +359,8 @@ public class RNNokeModule extends ReactContextBaseJavaModule {
       event.putString("name", noke.getName());
       event.putString("mac", noke.getMac());
       event.putString("hwVersion", noke.getVersion());
-      event.putString("lockState", noke.lockState);
-      event.putString("connectionState", noke.connectionState);
+      event.putString("lockState", noke.getLockState());
+      event.putString("connectionState", noke.getConnectionState());
       emitDeviceEvent("onNokeDiscovered", event);
 
     }
