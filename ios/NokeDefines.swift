@@ -51,6 +51,15 @@ public enum NokeLibraryMode : Int {
 //Defines used when interacting with the lock
 struct Constants {
     
+    static let NOKE_DEVICE_IDENTIFIER_STRING = "NOKE"
+    
+    static let NOKE_HW_TYPE_1ST_GEN_PADLOCK         = "2P";
+    static let NOKE_HW_TYPE_2ND_GEN_PADLOCK         = "3P";
+    static let NOKE_HW_TYPE_ULOCK                   = "2U";
+    static let NOKE_HW_TYPE_HD_LOCK                 = "2I";
+    static let NOKE_HW_TYPE_DOOR_CONTROLLER         = "2E";
+    static let NOKE_HW_TYPE_PB12                    = "1C";
+    
     //KEY LENGTHS
     static let AESKEYLEN =      16
     static let KEYLEN =         12
@@ -97,6 +106,9 @@ struct Constants {
     static let SHUTDOWN_ResultType = 0x64
     static let INVALIDDATA_ResultType = 0x65
     static let BATTERYDATA_ResultType = 0x66
+    static let FAILEDTOLOCK_ResultType = 0x68
+    static let FAILEDTOUNLOCK_ResultType = 0x69
+    static let FAILEDTOUNSHACKLE_ResultType = 0x6A
     static let INVALID_ResultType = 0xFF
     
     //COMMUNICATION PACKET TYPES
@@ -153,5 +165,3 @@ struct ApiURL {
     static let productionUploadURL      = "https://coreapi-beta.appspot.com/"
     static let developUploadURL         = "https://lock-api-dev.appspot.com/"
 }
-
-

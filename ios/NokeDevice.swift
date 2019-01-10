@@ -23,8 +23,10 @@ protocol NokeDeviceDelegate
     - Locked: Noke device locked
  */
 public enum NokeDeviceLockState : Int{
+    case nokeDeviceLockStateUnknown = -1
     case nokeDeviceLockStateUnlocked = 0
-    case nokeDeviceLockStateLocked = 1
+    case nokeDeviceLockStateUnshackled = 1
+    case nokeDeviceLockStateLocked = 2
 }
 
 /// Class stores information about the Noke device and contains methods for interacting with the Noke device
@@ -34,7 +36,7 @@ public class NokeDevice: NSObject, NSCoding, CBPeripheralDelegate{
     public var lastSeen: Double = 0.0
     
     /// typealias used for handling bytes from the lock
-    typealias byteArray = UnsafeMutablePointer<UInt8>
+    public typealias byteArray = UnsafeMutablePointer<UInt8>
     
     /// Name of the Noke device (strictly cosmetic)
     public var name: String = ""
@@ -70,7 +72,7 @@ public class NokeDevice: NSObject, NSCoding, CBPeripheralDelegate{
     public var connectionState: NokeDeviceConnectionState?
     
     /// Lock state of the Noke device
-    public var lockState: NokeDeviceLockState?
+    public var lockState: NokeDeviceLockState = NokeDeviceLockState.nokeDeviceLockStateLocked
     
     /// Bluetooth Gatt Service of Noke device
     var nokeService: CBService?
@@ -258,6 +260,40 @@ public class NokeDevice: NSObject, NSCoding, CBPeripheralDelegate{
         self.peripheral?.readValue(for: self.sessionCharacteristic!)
     }
     
+    /**
+         Parses through the broadcast data and pulls out the version
+     
+     Parameters
+           data: broadcast data from the lock
+     
+ 
+     */
+    public func setVersion(data: Data, deviceName: String){
+        var byteData = data    
+        if(deviceName.contains(Constants.NOKE_DEVICE_IDENTIFIER_STRING)){
+            byteData.withUnsafeMutableBytes{(bytes: UnsafeMutablePointer<UInt8>)->Void in
+                let majorVersion = bytes[3]
+                let minorVersion = bytes[4]
+                
+                let startIndex = deviceName.index(deviceName.startIndex, offsetBy: 4)
+                let endIndex = deviceName.index(startIndex, offsetBy:2)
+                let hardwareVersion = String(deviceName[startIndex..<endIndex])
+                self.version = String(format: "%@-%d.%d", hardwareVersion ?? "",majorVersion,minorVersion)
+            }
+        }
+    }
+    
+    public func getHardwareVersion()->String{
+        let endIndex = version.index(version.startIndex, offsetBy:2)
+        return String(version[version.startIndex..<endIndex])
+    }
+    
+    public func getSoftwareVersion()->String{
+        let startIndex = version.index(version.startIndex, offsetBy: 3)
+        return String(version[startIndex..<version.endIndex])
+    }
+    
+    
     /// MARK: CBPeripheral Delegate Methods
     public func peripheral(_ peripheral: CBPeripheral, didDiscoverServices error: Error?) {
         if(error != nil){
@@ -387,6 +423,15 @@ public class NokeDevice: NSObject, NSCoding, CBPeripheralDelegate{
                     case Constants.INVALIDDATA_ResultType:
                         NokeDeviceManager.shared().delegate?.nokeErrorDidOccur(error: NokeDeviceManagerError.nokeDeviceErrorInvalidData, message: "Invalid Data Result", noke: self)
                         self.moveToNext()
+                        break
+                    case Constants.FAILEDTOLOCK_ResultType:
+                        NokeDeviceManager.shared().delegate?.nokeErrorDidOccur(error: NokeDeviceManagerError.nokeDeviceErrorInvalidData, message: "Failed To Lock", noke: self)
+                        break
+                    case Constants.FAILEDTOUNLOCK_ResultType:
+                        NokeDeviceManager.shared().delegate?.nokeErrorDidOccur(error: NokeDeviceManagerError.nokeDeviceErrorInvalidData, message: "Failed To Unlock", noke: self)
+                        break
+                    case Constants.FAILEDTOUNSHACKLE_ResultType:
+                        NokeDeviceManager.shared().delegate?.nokeErrorDidOccur(error: NokeDeviceManagerError.nokeDeviceErrorInvalidData, message: "Failed To Unshackle", noke: self)
                         break
                     case Constants.INVALID_ResultType:
                         NokeDeviceManager.shared().delegate?.nokeErrorDidOccur(error: NokeDeviceManagerError.nokeDeviceErrorInvalidResult, message: "Invalid Result", noke: self)

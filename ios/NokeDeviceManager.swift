@@ -118,7 +118,13 @@ public class NokeDeviceManager: NSObject, CBCentralManagerDelegate, NokeDeviceDe
     public var unlockUrl: String = ""
     
     /// Delegate for NokeDeviceManager, calls protocol methods
-    public var delegate: NokeDeviceManagerDelegate?
+    public var delegate: NokeDeviceManagerDelegate? {
+        didSet{
+            if let state = NokeManagerBluetoothState.init(rawValue: cm.state.rawValue) {
+                delegate?.bluetoothManagerDidUpdateState(state: state)
+            }
+        }
+    }
     
     /// Array of Noke devices managed by the NokeDeviceManager
     var nokeDevices = [String: NokeDevice]()
@@ -137,6 +143,9 @@ public class NokeDeviceManager: NSObject, CBCentralManagerDelegate, NokeDeviceDe
     
     /// Boolean that allows SDK to discover devices that haven't been added to the array
     var allowAllNokeDevices: Bool = true
+    
+    /// typealias used for handling bytes from the lock
+    public typealias byteArray = UnsafeMutablePointer<UInt8>
     
     /**
      Initializes a new NokeDeviceManager
@@ -202,10 +211,10 @@ public class NokeDeviceManager: NSObject, CBCentralManagerDelegate, NokeDeviceDe
         }
     }
     
-    /// Allows NokeDeviceManager to discover devices that haven't been added to the device array
-    private func setAllowAllNokeDevices(_ allow: Bool){
-        allowAllNokeDevices = allow
-    }
+//    /// Allows NokeDeviceManager to discover devices that haven't been added to the device array
+//    public func setAllowAllNokeDevices(_ allow: Bool){
+//        allowAllNokeDevices = allow
+//    }
     
     /// MARK: Central Manager Delegate Methods
     public func centralManagerDidUpdateState(_ central: CBCentralManager) {
@@ -245,6 +254,9 @@ public class NokeDeviceManager: NSObject, CBCentralManagerDelegate, NokeDeviceDe
         }
         
         var noke = self.nokeWithMac(mac)
+        if(noke == nil && allowAllNokeDevices){
+            noke = NokeDevice.init(name: broadcastName!, mac: mac)
+        }
         
         noke?.lastSeen = Date().timeIntervalSince1970
         
@@ -253,24 +265,30 @@ public class NokeDeviceManager: NSObject, CBCentralManagerDelegate, NokeDeviceDe
             noke?.delegate = NokeDeviceManager.shared()
             noke?.peripheral = peripheral
             noke?.peripheral?.delegate = noke
+            noke?.lockState = NokeDeviceLockState.nokeDeviceLockStateLocked
             
             let broadcastData = advertisementData[CBAdvertisementDataManufacturerDataKey]
             if(broadcastData != nil){
-                let hardwareVersion = peripheral.name
-                noke?.version = hardwareVersion!
-            }
-            noke?.connectionState = .nokeDeviceConnectionStateDiscovered
-            self.delegate?.nokeDeviceDidUpdateState(to: (noke?.connectionState)!, noke: noke!)
-        }else if(allowAllNokeDevices){            
-            noke = NokeDevice.init(name: broadcastName!, mac: mac)
-            noke?.delegate = NokeDeviceManager.shared()
-            noke?.peripheral = peripheral
-            noke?.peripheral?.delegate = noke
-            
-            let broadcastData = advertisementData[CBAdvertisementDataManufacturerDataKey]
-            if(broadcastData != nil){
-                let hardwareVersion = peripheral.name
-                noke?.version = hardwareVersion!
+                
+                var broadcastBytes = broadcastData as! Data
+                noke?.setVersion(data: broadcastBytes, deviceName: broadcastName ?? "Invalid Device")
+                
+                
+                
+                if(noke?.getHardwareVersion().contains(Constants.NOKE_HW_TYPE_HD_LOCK) ?? false){
+                    let startIndex = noke?.version.index((noke?.version.startIndex)!, offsetBy: 2)
+                    if(Int((noke?.getSoftwareVersion()[startIndex!..<(noke?.getSoftwareVersion().endIndex)!])!)! >= 13){
+                        broadcastBytes.withUnsafeMutableBytes{(bytes: UnsafeMutablePointer<UInt8>)->Void in
+                            let lockStateBroadcast = (bytes[2] >> 5) & 0x01
+                            let lockStateBroadcast2 = (bytes[2] >> 6) & 0x01
+                            let lockState = lockStateBroadcast + lockStateBroadcast2
+                            noke?.lockState = NokeDeviceLockState(rawValue: Int(lockState))!
+                        }
+                    }else{
+                        noke?.lockState = NokeDeviceLockState.nokeDeviceLockStateUnknown
+                    }
+                    
+                }
             }
             noke?.connectionState = .nokeDeviceConnectionStateDiscovered
             self.delegate?.nokeDeviceDidUpdateState(to: (noke?.connectionState)!, noke: noke!)
