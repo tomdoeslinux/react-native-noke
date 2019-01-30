@@ -147,6 +147,9 @@ public class NokeDeviceManager: NSObject, CBCentralManagerDelegate, NokeDeviceDe
     /// typealias used for handling bytes from the lock
     public typealias byteArray = UnsafeMutablePointer<UInt8>
     
+    /// Variable to hold current NokeManagerBluetoothState
+    public var currentCentralManagerState: NokeManagerBluetoothState = NokeManagerBluetoothState.unknown
+    
     /**
      Initializes a new NokeDeviceManager
      - Returns: NokeDeviceManager
@@ -218,9 +221,13 @@ public class NokeDeviceManager: NSObject, CBCentralManagerDelegate, NokeDeviceDe
     
     /// MARK: Central Manager Delegate Methods
     public func centralManagerDidUpdateState(_ central: CBCentralManager) {
-        self.delegate?.bluetoothManagerDidUpdateState(state: NokeManagerBluetoothState.init(rawValue: central.state.rawValue)!)        
+        currentCentralManagerState = NokeManagerBluetoothState.init(rawValue: central.state.rawValue)!
+        self.delegate?.bluetoothManagerDidUpdateState(state: currentCentralManagerState)
     }
-    
+
+    public func isBluetoothEnabled()->Bool{
+        return currentCentralManagerState == NokeManagerBluetoothState.poweredOn
+    }
     
     public func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral, advertisementData: [String : Any], rssi RSSI: NSNumber) {
         

@@ -144,6 +144,23 @@ public class RNNokeModule extends ReactContextBaseJavaModule {
   }
 
   @ReactMethod
+  public void isBluetoothEnabled(Promise promise) {
+    try {
+      if (mNokeService == null) {
+        promise.reject("message", "mNokeService is null");
+        return;
+      }
+      final Boolean enabled = mNokeService.isBluetoothEnabled();
+      final WritableMap event = Arguments.createMap();
+      event.putBoolean("enabled", enabled);
+
+      promise.resolve(event);
+    } catch (IllegalViewOperationException e) {
+      promise.reject("message", e.getMessage());
+    }
+  }
+
+  @ReactMethod
   public void startScan(Promise promise) {
     try {
       mNokeService.startScanningForNokeDevices();
@@ -435,6 +452,13 @@ public class RNNokeModule extends ReactContextBaseJavaModule {
       final WritableMap event = Arguments.createMap();
       event.putInt("code", bluetoothStatus);
       emitDeviceEvent("onBluetoothStatusChanged", event);
+    }
+
+    @Override
+    public void onLocationStatusChanged(Boolean enabled) {
+      final WritableMap event = Arguments.createMap();
+      event.putBoolean("enabled", enabled);
+      emitDeviceEvent("onLocationStatusChanged", event);
     }
 
     @Override

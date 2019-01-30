@@ -94,4 +94,9 @@ RCT_EXTERN_METHOD(
                   stopScan:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject
                   )
+
+RCT_EXTERN_METHOD(
+                  isBluetoothEnabled:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject
+                  )
 @end

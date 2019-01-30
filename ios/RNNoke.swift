@@ -70,23 +70,20 @@ class RNNoke : RCTEventEmitter, NokeDeviceManagerDelegate {
     }
 
     func bluetoothManagerDidUpdateState(state: NokeManagerBluetoothState) {
-        var message: String = ""
-        var code: Int = 10
+        debugPrint(state)
         switch (state) {
         case NokeManagerBluetoothState.poweredOn:
-            message = "on"
-            code = 12
+            sendEvent(withName: "onBluetoothStatusChanged", body: ["code": 12, "message": "on"])
             break
         case NokeManagerBluetoothState.poweredOff:
             debugPrint("NOKE MANAGER OFF")
-            message = "off"
+            sendEvent(withName: "onBluetoothStatusChanged", body: ["code": 10, "message": "off"])
             break
         default:
             debugPrint("NOKE MANAGER UNSUPPORTED")
-            message = "unsupported"
+            // FUTURE: handle other states
             break
         }
-        sendEvent(withName: "onBluetoothStatusChanged", body: ["code": code, "message": message])
     }
 
     // Export constants to use in your native module
@@ -244,9 +241,7 @@ class RNNoke : RCTEventEmitter, NokeDeviceManagerDelegate {
 
         NokeDeviceManager.shared().removeAllNoke()
 
-        resolve([
-            "status": true
-            ])
+        resolve(["status": true])
     }
 
     @objc func removeNokeDevice(
@@ -257,9 +252,15 @@ class RNNoke : RCTEventEmitter, NokeDeviceManagerDelegate {
 
         NokeDeviceManager.shared().removeNoke(mac: mac)
 
-        resolve([
-            "status": true
-            ])
+        resolve(["status": true])
+    }
+
+    @objc func isBluetoothEnabled(
+        _ resolve: RCTPromiseResolveBlock,
+        rejecter reject: RCTPromiseRejectBlock
+        ) {
+
+        resolve(["enabled": NokeDeviceManager.shared().isBluetoothEnabled()])
     }
 
     override func supportedEvents() -> [String]! {
@@ -274,7 +275,8 @@ class RNNoke : RCTEventEmitter, NokeDeviceManagerDelegate {
             "onNokeDisconnected",
             "onNokeShutdown",
             "onBluetoothStatusChanged",
-            "onError"
+            "onError",
+            "onLocationStatusChanged"
         ]
     }
 }
