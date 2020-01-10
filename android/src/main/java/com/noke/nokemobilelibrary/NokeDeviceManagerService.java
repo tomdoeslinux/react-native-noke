@@ -141,6 +141,9 @@ public class NokeDeviceManagerService extends Service {
      * Duration that bluetooth scans before shutting off and restarting
      */
     private int bluetoothScanDuration;
+
+    private String apiKey = NokeDefines.NOKE_MOBILE_API_KEY;
+
     /**
      * A LinkedHashMap that stores a list of NokeDevices linked my MAC address.
      * Only devices that are in this array will be discovered when scanning
@@ -216,6 +219,14 @@ public class NokeDeviceManagerService extends Service {
 
 
         //
+    }
+
+    public String getApiKey() {
+        return apiKey;
+    }
+
+    public void setApiKey(String apiKey) {
+        this.apiKey = apiKey;
     }
 
     /**
@@ -400,6 +411,21 @@ public class NokeDeviceManagerService extends Service {
         }
     }
 
+    public boolean isBluetoothEnabled() {
+        boolean bluetoothEnabled = false;
+        if (mBluetoothManager != null) {
+            mBluetoothManager = (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
+        }
+        if (mBluetoothManager != null && mBluetoothAdapter == null) {
+            mBluetoothAdapter = mBluetoothManager.getAdapter();
+        }
+        if (mBluetoothAdapter == null || !mBluetoothAdapter.isEnabled()) {
+            mGlobalNokeListener.onError(null, NokeMobileError.ERROR_BLUETOOTH_DISABLED, "Bluetooth is disabled");
+        } else {
+            bluetoothEnabled = true;
+        }
+        return bluetoothEnabled;
+    }
 
     boolean scanLoopOn = false;
     boolean scanLoopOff = false;
