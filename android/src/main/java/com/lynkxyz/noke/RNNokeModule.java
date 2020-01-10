@@ -455,13 +455,6 @@ public class RNNokeModule extends ReactContextBaseJavaModule {
     }
 
     @Override
-    public void onLocationStatusChanged(Boolean enabled) {
-      final WritableMap event = Arguments.createMap();
-      event.putBoolean("enabled", enabled);
-      emitDeviceEvent("onLocationStatusChanged", event);
-    }
-
-    @Override
     public void onError(NokeDevice noke, int error, String message) {
       Log.e(TAG, "NOKE SERVICE ERROR " + error + ": " + message);
       switch (error) {
