@@ -1157,12 +1157,8 @@ public class NokeDeviceManagerService extends Service {
                     }
                     jsonObject.accumulate("logs", data);
                     try {
-                        PackageManager pm = getApplicationContext().getPackageManager();
-                        ApplicationInfo ai = pm.getApplicationInfo(getApplicationContext().getPackageName(), PackageManager.GET_META_DATA);
-                        Bundle bundle = ai.metaData;
-                        String nokeMobileApiKey = bundle.getString(NokeDefines.NOKE_MOBILE_API_KEY);
                         this.uploadDataCallback(NokeMobileApiClient.POST(NokeDefines.uploadURL, jsonObject.toString(), this.getApiKey(), proxyAddress, port));
-                    } catch (PackageManager.NameNotFoundException | NullPointerException e) {
+                    } catch (NullPointerException e) {
                         e.printStackTrace();
                         mGlobalNokeListener.onError(null, NokeMobileError.ERROR_MISSING_API_KEY, "No API Key found. Have you set it in your Android Manifest?");
                     }
@@ -1496,12 +1492,8 @@ public class NokeDeviceManagerService extends Service {
                     jsonObject.accumulate("mac", noke.getMac());
                     String url = NokeDefines.uploadURL.replace("upload/", "restore/");
                     try {
-                        PackageManager pm = getApplicationContext().getPackageManager();
-                        ApplicationInfo ai = pm.getApplicationInfo(getApplicationContext().getPackageName(), PackageManager.GET_META_DATA);
-                        Bundle bundle = ai.metaData;
-                        String nokeMobileApiKey = bundle.getString(NokeDefines.NOKE_MOBILE_API_KEY);
                         NokeDeviceManagerService.this.restoreKeyCallback(NokeMobileApiClient.POST(url, jsonObject.toString(), NokeDeviceManagerService.this.getApiKey(), proxyAddress, port), noke);
-                    } catch (PackageManager.NameNotFoundException | NullPointerException e) {
+                    } catch (NullPointerException e) {
                         e.printStackTrace();
                         mGlobalNokeListener.onError(null, NokeMobileError.ERROR_MISSING_API_KEY, "No API Key found. Have you set it in your Android Manifest?");
                         noke.isRestoring = false;
@@ -1547,12 +1539,8 @@ public class NokeDeviceManagerService extends Service {
                     jsonObject.accumulate("command_id", commandid);
                     String url = NokeDefines.uploadURL.replace("upload/", "restore/confirm/");
                     try {
-                        PackageManager pm = getApplicationContext().getPackageManager();
-                        ApplicationInfo ai = pm.getApplicationInfo(getApplicationContext().getPackageName(), PackageManager.GET_META_DATA);
-                        Bundle bundle = ai.metaData;
-                        String nokeMobileApiKey = bundle.getString(NokeDefines.NOKE_MOBILE_API_KEY);
                         NokeDeviceManagerService.this.confirmRestoreCallback(NokeMobileApiClient.POST(url, jsonObject.toString(), NokeDeviceManagerService.this.getApiKey(), proxyAddress, port));
-                    } catch (PackageManager.NameNotFoundException | NullPointerException e) {
+                    } catch (NullPointerException e) {
                         e.printStackTrace();
                         mGlobalNokeListener.onError(null, NokeMobileError.ERROR_MISSING_API_KEY, "No API Key found. Have you set it in your Android Manifest?");
                     }
