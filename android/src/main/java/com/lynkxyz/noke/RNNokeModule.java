@@ -35,7 +35,6 @@ public class RNNokeModule extends ReactContextBaseJavaModule {
 
   public static final String TAG = "RNNoke";
   private NokeDeviceManagerService mNokeService = null;
-  private NokeDevice currentNoke;
 
   private Integer nokeLibraryMode = 0;
 
@@ -223,27 +222,28 @@ public class RNNokeModule extends ReactContextBaseJavaModule {
   }
 
   @ReactMethod
-  public void sendCommands(String command, Promise promise) {
+  public void sendCommands(ReadableMap data, Promise promise) {
     try {
-      if(currentNoke == null) {
-        promise.reject("message", "currentNoke is null in sendCommands");
-        return;
-      }
-      currentNoke.sendCommands(command);
-      promise.resolve(createCommonEvents(currentNoke));
+      NokeDevice daNoke = mNokeService.nokeDevices.get(data.getString("mac"));
+        if(daNoke == null) {
+          promise.reject("message", "unable to sendCommands, noke not found");
+          return;
+        }
+      daNoke.sendCommands(data.getString("command"));
+      promise.resolve(createCommonEvents(daNoke));
     } catch (IllegalViewOperationException e) {
       promise.reject("message", e.getMessage());
     }
   }
 
   @ReactMethod
-  public void connect(ReadableMap data, Promise promise) {
+  public void connect(String mac, Promise promise) {
     if(mNokeService == null) {
       promise.reject("message", "mNokeService is null");
       return;
     }
 
-    NokeDevice daNoke = mNokeService.nokeDevices.get(data.getString("mac"));
+    NokeDevice daNoke = mNokeService.nokeDevices.get(mac);
     if(daNoke == null) {
       promise.reject("message", "unable to connect, noke not found");
       return;
@@ -257,17 +257,19 @@ public class RNNokeModule extends ReactContextBaseJavaModule {
   }
 
   @ReactMethod
-  public void disconnect(Promise promise) {
+  public void disconnect(String mac, Promise promise) {
     if(mNokeService == null) {
       promise.reject("message", "mNokeService is null");
       return;
     }
-    if(currentNoke == null) {
-      promise.reject("message", "currentNoke is null in disconnect");
+
+    NokeDevice daNoke = mNokeService.nokeDevices.get(mac);
+    if(daNoke == null) {
+      promise.reject("message", "unable to disconnect, noke not found");
       return;
     }
 
-    mNokeService.disconnectNoke(currentNoke);
+    mNokeService.disconnectNoke(daNoke);
 
     final WritableMap event = Arguments.createMap();
     event.putBoolean("status", true);
@@ -302,15 +304,21 @@ public class RNNokeModule extends ReactContextBaseJavaModule {
   }
 
   @ReactMethod
-  public void offlineUnlock(Promise promise) {
+  public void offlineUnlock(String mac, Promise promise) {
     try {
-      WritableMap event = createCommonEvents(currentNoke);
+      NokeDevice daNoke = mNokeService.nokeDevices.get(mac);
+      if(daNoke == null) {
+        promise.reject("message", "unable to offlineUnlock, noke not found");
+        return;
+      }
 
-      if (currentNoke == null) {
+      WritableMap event = createCommonEvents(daNoke);
+
+      if (daNoke == null) {
         event.putBoolean("success", false);
       } else {
         event.putBoolean("success", true);
-        currentNoke.offlineUnlock();
+        daNoke.offlineUnlock();
       }
       promise.resolve(event);
     } catch (IllegalViewOperationException e) {
@@ -393,7 +401,6 @@ public class RNNokeModule extends ReactContextBaseJavaModule {
 
     @Override
     public void onNokeConnected(NokeDevice noke) {
-      currentNoke = noke;
       final WritableMap event = Arguments.createMap();
       event.putString("name", noke.getName());
       event.putString("mac", noke.getMac());
@@ -428,7 +435,6 @@ public class RNNokeModule extends ReactContextBaseJavaModule {
       event.putString("mac", noke.getMac());
       event.putString("session", noke.getSession());
       emitDeviceEvent("onNokeDisconnected", event);
-      currentNoke = null;
       mNokeService.uploadData();
     }
 
