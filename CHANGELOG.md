@@ -14,6 +14,11 @@ Add sections as needed: `Enhancements`, `Changes`, `Bug fixes`, `Internal`
 
 ### Internal
 
+## [4.0.1](https://github.com/PetroCloud/react-native-noke/compare/v4.0.0...v4.0.1)
+
+### Changes
+- Requires specifying device in React Native bridge in order to better handle interacting with multiple locks, and removes `currentNoke` from bridge ([@erica])
+
 ## [4.0.0](https://github.com/PetroCloud/react-native-noke/compare/v3.0.14...v4.0.0)
 
 ### Changes
