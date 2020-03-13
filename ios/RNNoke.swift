@@ -175,17 +175,18 @@ class RNNoke : RCTEventEmitter, NokeDeviceManagerDelegate {
     }
 
     @objc func sendCommands(
-        _ data: Dictionary<String, String>,
+        _ mac: String,
+        command: String,
         resolver resolve: RCTPromiseResolveBlock,
         rejecter reject: RCTPromiseRejectBlock
         ) {
-        var daNoke: NokeDevice? = NokeDeviceManager.shared().nokeWithMac(data["mac"]!)
+        let daNoke: NokeDevice? = NokeDeviceManager.shared().nokeWithMac(mac)
         if(daNoke == nil) {
             let error = NSError(domain: "", code: 200, userInfo: nil)
             reject("message", "unable to sendCommands, noke not found", error)
             return
         }
-        daNoke?.sendCommands(data["command"]!)
+        daNoke?.sendCommands(command)
 
         resolve(["name": daNoke?.name, "mac": daNoke?.mac])
     }
@@ -195,7 +196,7 @@ class RNNoke : RCTEventEmitter, NokeDeviceManagerDelegate {
         resolver resolve: RCTPromiseResolveBlock,
         rejecter reject: RCTPromiseRejectBlock
         ) {
-        var daNoke: NokeDevice? = NokeDeviceManager.shared().nokeWithMac(mac)
+        let daNoke: NokeDevice? = NokeDeviceManager.shared().nokeWithMac(mac)
         if(daNoke == nil) {
             let error = NSError(domain: "", code: 200, userInfo: nil)
             reject("message", "unable to connect, noke not found", error)
@@ -210,7 +211,7 @@ class RNNoke : RCTEventEmitter, NokeDeviceManagerDelegate {
         resolver resolve: RCTPromiseResolveBlock,
         rejecter reject: RCTPromiseRejectBlock
         ) {
-        var daNoke: NokeDevice? = NokeDeviceManager.shared().nokeWithMac(mac)
+        let daNoke: NokeDevice? = NokeDeviceManager.shared().nokeWithMac(mac)
         if(daNoke == nil) {
             let error = NSError(domain: "", code: 200, userInfo: nil)
             reject("message", "unable to disconnect, noke not found", error)
@@ -226,7 +227,7 @@ class RNNoke : RCTEventEmitter, NokeDeviceManagerDelegate {
         resolver resolve: RCTPromiseResolveBlock,
         rejecter reject: RCTPromiseRejectBlock
         ) {
-        var daNoQke: NokeDevice? = NokeDeviceManager.shared().nokeWithMac(mac)
+        let daNoke: NokeDevice? = NokeDeviceManager.shared().nokeWithMac(mac)
         var event: [String: Any] = [
             "name": daNoke?.name ?? String(),
             "mac": daNoke?.mac ?? String()

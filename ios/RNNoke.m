@@ -69,13 +69,13 @@ RCT_EXTERN_METHOD(
                   )
 
 RCT_EXTERN_METHOD(
-                  sendCommands:(NSString) value
+                  sendCommands:(NSString) value command:(NSString) value
                   resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject
                   )
 
 RCT_EXTERN_METHOD(
-                  connect:(NSDictionary) data
+                  connect:(NSString) value
                   resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject
                   )

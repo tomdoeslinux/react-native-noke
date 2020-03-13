@@ -222,14 +222,14 @@ public class RNNokeModule extends ReactContextBaseJavaModule {
   }
 
   @ReactMethod
-  public void sendCommands(ReadableMap data, Promise promise) {
+  public void sendCommands(String mac, String command, Promise promise) {
     try {
-      NokeDevice daNoke = mNokeService.nokeDevices.get(data.getString("mac"));
+      NokeDevice daNoke = mNokeService.nokeDevices.get(mac);
         if(daNoke == null) {
           promise.reject("message", "unable to sendCommands, noke not found");
           return;
         }
-      daNoke.sendCommands(data.getString("command"));
+      daNoke.sendCommands(command);
       promise.resolve(createCommonEvents(daNoke));
     } catch (IllegalViewOperationException e) {
       promise.reject("message", e.getMessage());
