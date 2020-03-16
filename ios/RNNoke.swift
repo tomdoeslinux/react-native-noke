@@ -2,7 +2,6 @@ import Foundation
 
 @objc(RNNoke)
 class RNNoke : RCTEventEmitter, NokeDeviceManagerDelegate {
-    var currentNoke: NokeDevice?
 
     func nokeDeviceDidUpdateState(to state: NokeDeviceConnectionState, noke: NokeDevice) {
         switch state {
@@ -19,7 +18,6 @@ class RNNoke : RCTEventEmitter, NokeDeviceManagerDelegate {
             break
         case .nokeDeviceConnectionStateConnected:
             print(noke.session!)
-            currentNoke = noke
 
             sendEvent(withName: "onNokeConnected", body: [
                 "name": noke.name,
@@ -39,7 +37,6 @@ class RNNoke : RCTEventEmitter, NokeDeviceManagerDelegate {
             break
         case .nokeDeviceConnectionStateDisconnected:
             NokeDeviceManager.shared().cacheUploadQueue()
-            currentNoke = nil
 
             sendEvent(withName: "onNokeDisconnected", body: ["name": noke.name, "mac": noke.mac])
             break
@@ -178,56 +175,67 @@ class RNNoke : RCTEventEmitter, NokeDeviceManagerDelegate {
     }
 
     @objc func sendCommands(
-        _ command: String,
-        resolver resolve: RCTPromiseResolveBlock,
-        rejecter reject: RCTPromiseRejectBlock
-    ) {
-        if(currentNoke == nil) {
-            let error = NSError(domain: "", code: 200, userInfo: nil)
-            reject("message", "currentNoke is null", error)
-            return
-        }
-        currentNoke?.sendCommands(command)
-
-        resolve(["name": currentNoke?.name, "mac": currentNoke?.mac])
-    }
-
-    @objc func connect(
-        _ data: Dictionary<String, String>,
+        _ mac: String,
+        command: String,
         resolver resolve: RCTPromiseResolveBlock,
         rejecter reject: RCTPromiseRejectBlock
         ) {
-        var daNoke: NokeDevice? = NokeDeviceManager.shared().nokeWithMac(data["mac"]!)
+        let daNoke: NokeDevice? = NokeDeviceManager.shared().nokeWithMac(mac)
+        if(daNoke == nil) {
+            let error = NSError(domain: "", code: 200, userInfo: nil)
+            reject("message", "unable to sendCommands, noke not found", error)
+            return
+        }
+        daNoke?.sendCommands(command)
+
+        resolve(["name": daNoke?.name, "mac": daNoke?.mac])
+    }
+
+    @objc func connect(
+        _ mac: String,
+        resolver resolve: RCTPromiseResolveBlock,
+        rejecter reject: RCTPromiseRejectBlock
+        ) {
+        let daNoke: NokeDevice? = NokeDeviceManager.shared().nokeWithMac(mac)
+        if(daNoke == nil) {
+            let error = NSError(domain: "", code: 200, userInfo: nil)
+            reject("message", "unable to connect, noke not found", error)
+            return
+        }
         NokeDeviceManager.shared().connectToNokeDevice(daNoke!)
         resolve(["status": true])
     }
 
     @objc func disconnect(
-        _ resolve: RCTPromiseResolveBlock,
+        _ mac: String,
+        resolver resolve: RCTPromiseResolveBlock,
         rejecter reject: RCTPromiseRejectBlock
         ) {
-        if(currentNoke == nil) {
+        let daNoke: NokeDevice? = NokeDeviceManager.shared().nokeWithMac(mac)
+        if(daNoke == nil) {
             let error = NSError(domain: "", code: 200, userInfo: nil)
-            reject("message", "currentNoke is null", error)
+            reject("message", "unable to disconnect, noke not found", error)
             return
         }
-        NokeDeviceManager.shared().disconnectNokeDevice(currentNoke!)
+        NokeDeviceManager.shared().disconnectNokeDevice(daNoke!)
 
         resolve(["status": true])
     }
 
     @objc func offlineUnlock(
-        _ resolve: RCTPromiseResolveBlock,
+        _ mac: String,
+        resolver resolve: RCTPromiseResolveBlock,
         rejecter reject: RCTPromiseRejectBlock
         ) {
+        let daNoke: NokeDevice? = NokeDeviceManager.shared().nokeWithMac(mac)
         var event: [String: Any] = [
-            "name": currentNoke?.name ?? String(),
-            "mac": currentNoke?.mac ?? String()
+            "name": daNoke?.name ?? String(),
+            "mac": daNoke?.mac ?? String()
         ]
-        if(currentNoke == nil) {
+        if(daNoke == nil) {
             event["success"] = false
         } else {
-            currentNoke?.offlineUnlock()
+            daNoke?.offlineUnlock()
             event["success"] = true
         }
 
