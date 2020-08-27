@@ -3,9 +3,7 @@ Pod::Spec.new do |s|
   s.name         = "RNNoke"
   s.version      = "1.0.0"
   s.summary      = "RNNoke"
-  s.description  = <<-DESC
-                  RNNoke
-                   DESC
+  s.description  ="description"
   s.homepage     = "http://codeback.es/"
   s.license      = "MIT"
   # s.license      = { :type => "MIT", :file => "FILE_LICENSE" }
