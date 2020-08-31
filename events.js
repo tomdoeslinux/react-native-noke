@@ -1,4 +1,3 @@
-import { debounce } from 'lodash';
 import {
   NativeEventEmitter,
   NativeModules
