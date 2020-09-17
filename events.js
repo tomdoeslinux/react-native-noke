@@ -49,6 +49,14 @@ export const fromNokeEvents = () => {
   let lastEvent = '';
 
   return Observable.create(observer => {
+    onEvent('onServiceConnected', data => {
+      observer.next({
+        name: 'onServiceConnected',
+        data
+      });
+      lastEvent = 'onServiceConnected';
+    });
+    
     onEvent('onNokeDiscovered', data => {
       observer.next({
         name: 'onNokeDiscovered',

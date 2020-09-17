@@ -25,20 +25,20 @@ protocol NokeDeviceDelegate
  - Locked: Noke device locked
  */
 @objc public enum NokeDeviceLockState : Int{
-    @available(*, unavailable, renamed: "Unknown")
-    case nokeDeviceLockStateUnknown = -100
-    @available(*, unavailable, renamed: "Unlocked")
-    case nokeDeviceLockStateUnlocked = 100
-    @available(*, unavailable, renamed: "Unshackled")
-    case nokeDeviceLockStateUnshackled = 200
-    @available(*, unavailable, renamed: "Locked")
-    case nokeDeviceLockStateLocked = 300
-    @available(*, unavailable, renamed: "Unshackling")
-    case nokeDeviceLockStateUnshackling = 400
-    @available(*, unavailable, renamed: "Unlocking")
-    case nokeDeviceLockStateUnlocking = 500
-    @available(*, unavailable, renamed: "LockedNoMagnet")
-    case nokeDeviceLockStateLockedNoMagnet = 700
+    // @available(*, unavailable, renamed: "Unknown")
+    // case nokeDeviceLockStateUnknown = -100
+    // @available(*, unavailable, renamed: "Unlocked")
+    // case nokeDeviceLockStateUnlocked = 100
+    // @available(*, unavailable, renamed: "Unshackled")
+    // case nokeDeviceLockStateUnshackled = 200
+    // @available(*, unavailable, renamed: "Locked")
+    // case nokeDeviceLockStateLocked = 300
+    // @available(*, unavailable, renamed: "Unshackling")
+    // case nokeDeviceLockStateUnshackling = 400
+    // @available(*, unavailable, renamed: "Unlocking")
+    // case nokeDeviceLockStateUnlocking = 500
+    // @available(*, unavailable, renamed: "LockedNoMagnet")
+    // case nokeDeviceLockStateLockedNoMagnet = 700
     
     case Unknown = -1
     case Unlocked = 0

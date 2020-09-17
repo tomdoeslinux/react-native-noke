@@ -10,10 +10,10 @@ Pod::Spec.new do |s|
 
   s.authors      = package['author']
   s.homepage     = package['homepage']
-  s.platforms    = { :ios => "10.0" }
+  s.platforms    = { :ios => "10" }
 
   s.source       = { :git => "https://github.com/codeback/react-native-noke.git", :tag => "master" }
-  s.source_files  = "ios/**/*.{h,m}"
+  s.source_files  = "ios/**/*.{swift,h,m,c}"
   s.requires_arc = true
 
   s.dependency "React"
