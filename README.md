@@ -47,7 +47,7 @@ or latest version
 ## Usage
 ```javascript
 import RNNoke from 'react-native-noke';
-RNNoke.initiateNokeService()
+RNNoke.initiateNokeService(mode)
 
 interface NokeData {
   name?: string

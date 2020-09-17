@@ -39,24 +39,26 @@ public enum NokeDeviceManagerError : Int {
     //Noke Mobile Library Errors
     case nokeLibraryErrorInvalidOfflineKey  = 301
     case nokeLibraryErrorNoModeSet          = 302
+    case nokeLibraryConnectionTimeout       = 317
 }
 
 public enum NokeLibraryMode : Int {
     case SANDBOX      = 0;
     case PRODUCTION   = 1;
     case DEVELOP      = 2;
+    case OPEN         = 3;
 }
 
 
 //Defines used when interacting with the lock
-struct Constants {
+public struct Constants {
     
     static let NOKE_DEVICE_IDENTIFIER_STRING = "NOKE"
     
     static let NOKE_HW_TYPE_1ST_GEN_PADLOCK         = "2P";
     static let NOKE_HW_TYPE_2ND_GEN_PADLOCK         = "3P";
     static let NOKE_HW_TYPE_ULOCK                   = "2U";
-    static let NOKE_HW_TYPE_HD_LOCK                 = "2I";
+    static let NOKE_HW_TYPE_HD_LOCK                 = "I";
     static let NOKE_HW_TYPE_DOOR_CONTROLLER         = "2E";
     static let NOKE_HW_TYPE_PB12                    = "1C";
     
@@ -156,12 +158,15 @@ struct Constants {
     static let QCDISABLED =         0x00
     
     //Offline Key Types
-    static let OFFLINE_KEY_LENGTH =  32
-    static let OFFLINE_COMMAND_LENGTH = 40
+    public static let OFFLINE_KEY_LENGTH =  32
+    public static let OFFLINE_COMMAND_LENGTH = 40
 }
 
 struct ApiURL {
     static let sandboxUploadURL         = "https://coreapi-sandbox.appspot.com/"
     static let productionUploadURL      = "https://coreapi-beta.appspot.com/"
     static let developUploadURL         = "https://lock-api-dev.appspot.com/"
+    static let openString               = "OPEN"
 }
+
+

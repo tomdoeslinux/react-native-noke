@@ -6,7 +6,7 @@ class RNNoke : RCTEventEmitter, NokeDeviceManagerDelegate {
     func nokeDeviceDidUpdateState(to state: NokeDeviceConnectionState, noke: NokeDevice) {
         switch state {
 
-        case .nokeDeviceConnectionStateDiscovered:
+        case .Discovered:
 
             sendEvent(withName: "onNokeDiscovered", body: [
                 "name": noke.name,
@@ -16,7 +16,7 @@ class RNNoke : RCTEventEmitter, NokeDeviceManagerDelegate {
                 "connectionState": noke.connectionState
             ])
             break
-        case .nokeDeviceConnectionStateConnected:
+        case .Connected:
             print(noke.session!)
 
             sendEvent(withName: "onNokeConnected", body: [
@@ -27,15 +27,15 @@ class RNNoke : RCTEventEmitter, NokeDeviceManagerDelegate {
                 "hwVersion": noke.version
             ])
             break
-        case .nokeDeviceConnectionStateSyncing:
+        case .Syncing:
 
             sendEvent(withName: "onNokeConnecting", body: ["name": noke.name, "mac": noke.mac, "hwVersion": noke.version])
             break
-        case .nokeDeviceConnectionStateUnlocked:
+        case .Unlocked:
 
             sendEvent(withName: "onNokeUnlocked", body: ["name": noke.name, "mac": noke.mac])
             break
-        case .nokeDeviceConnectionStateDisconnected:
+        case .Disconnected:
             NokeDeviceManager.shared().cacheUploadQueue()
 
             sendEvent(withName: "onNokeDisconnected", body: ["name": noke.name, "mac": noke.mac])
@@ -81,6 +81,10 @@ class RNNoke : RCTEventEmitter, NokeDeviceManagerDelegate {
             // FUTURE: handle other states
             break
         }
+    }
+
+    func nokeReadyForFirmwareUpdate(noke: NokeDevice) {
+        // TODO: implement
     }
 
     // Export constants to use in your native module
@@ -263,13 +267,13 @@ class RNNoke : RCTEventEmitter, NokeDeviceManagerDelegate {
         resolve(["status": true])
     }
 
-    @objc func isBluetoothEnabled(
-        _ resolve: RCTPromiseResolveBlock,
-        rejecter reject: RCTPromiseRejectBlock
-        ) {
+    // @objc func isBluetoothEnabled(
+    //     _ resolve: RCTPromiseResolveBlock,
+    //     rejecter reject: RCTPromiseRejectBlock
+    //     ) {
 
-        resolve(["enabled": NokeDeviceManager.shared().isBluetoothEnabled()])
-    }
+    //     resolve(["enabled": NokeDeviceManager.shared().isBluetoothEnabled()] as [String:Any])
+    // }
 
     override func supportedEvents() -> [String]! {
         return [
