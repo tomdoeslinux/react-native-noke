@@ -161,6 +161,25 @@ class RNNoke : RCTEventEmitter, NokeDeviceManagerDelegate {
         /**
         * name: "Lock Name"
         * mac: "XX:XX:XX:XX:XX:XX"
+        */
+        let noke = NokeDevice.init(
+            name: data["name"]! as String,
+            mac: data["mac"]! as String
+        )
+
+        NokeDeviceManager.shared().addNoke(noke!)
+
+        resolve(["status": true])
+    }
+
+    @objc func addNokeOfflineValues(
+        _ data: Dictionary<String, String>,
+        resolver resolve: RCTPromiseResolveBlock,
+        rejecter reject: RCTPromiseRejectBlock
+        ) {
+        /**
+        * name: "Lock Name"
+        * mac: "XX:XX:XX:XX:XX:XX"
         * key: "OFFLINE_KEY"
         * cmd: "OFFLINE_COMMAND"
         */
