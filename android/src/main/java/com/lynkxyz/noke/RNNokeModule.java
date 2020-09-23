@@ -191,6 +191,38 @@ public class RNNokeModule extends ReactContextBaseJavaModule {
       /**
        * name: "Lock Name"
        * mac: "XX:XX:XX:XX:XX:XX"
+       */
+      if(data == null) {
+        promise.reject("message", "data is null");
+        return;
+      }
+
+      NokeDevice noke = new NokeDevice(
+              data.getString("name"),
+              data.getString("mac")
+      );
+
+      if (mNokeService == null) {
+        promise.reject("message", "mNokeService is null");
+        return;
+      }
+      mNokeService.addNokeDevice(noke);
+
+      final WritableMap event = Arguments.createMap();
+      event.putBoolean("status", true);
+
+      promise.resolve(event);
+    } catch (IllegalViewOperationException e) {
+      promise.reject("message", e.getMessage());
+    }
+  }
+
+  @ReactMethod
+  public void addNokeOfflineValues(ReadableMap data, Promise promise) {
+    try {
+      /**
+       * name: "Lock Name"
+       * mac: "XX:XX:XX:XX:XX:XX"
        * key: "OFFLINE_KEY"
        * cmd: "OFFLINE_COMMAND"
        */

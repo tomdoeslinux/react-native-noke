@@ -53,6 +53,13 @@ RCT_EXTERN_METHOD(
 
 
 RCT_EXTERN_METHOD(
+                  addNokeOfflineValues:(NSDictionary) value
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject
+                  )
+
+
+RCT_EXTERN_METHOD(
                   offlineUnlock:(NSString) value
                   resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject
