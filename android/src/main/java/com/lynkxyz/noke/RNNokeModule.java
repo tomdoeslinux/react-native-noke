@@ -5,7 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.IBinder;
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import android.system.ErrnoException;
 import android.util.Log;
 
@@ -57,6 +58,17 @@ public class RNNokeModule extends ReactContextBaseJavaModule {
     event.putString("mac", nokeDevice.getMac());
 
     return event;
+  }
+
+  // Required for rn built in EventEmitter Calls.
+  @ReactMethod
+  public void addListener(String eventName) {
+
+  }
+
+  @ReactMethod
+  public void removeListeners(Integer count) {
+
   }
 
   @ReactMethod

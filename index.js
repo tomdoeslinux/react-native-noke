@@ -1,13 +1,11 @@
-import {
-  NativeModules
-} from 'react-native';
+import { NativeModules } from "react-native";
 import {
   fromNokeEvents,
   onEvent,
   onEventOnce,
   offEvent,
-  getEventListeners
-} from './events';
+  removeAllListeners,
+} from "./events";
 
 const { RNNoke } = NativeModules;
 
@@ -20,7 +18,7 @@ export default {
   offlineUnlock: RNNoke.offlineUnlock,
   sendCommands: RNNoke.sendCommands,
   addNokeDevice: RNNoke.addNokeDevice,
-  addNokeOfflineValues: RNNoke.addNokeOfflineValues, 
+  addNokeOfflineValues: RNNoke.addNokeOfflineValues,
   removeAllNokes: RNNoke.removeAllNokes,
   removeNokeDevice: RNNoke.removeNokeDevice,
   startScan: RNNoke.startScan,
@@ -28,7 +26,7 @@ export default {
   disconnect: RNNoke.disconnect,
   connect: RNNoke.connect,
   fromNokeEvents,
-  getEventListeners,
+  removeAllListeners,
   isBluetoothEnabled: RNNoke.isBluetoothEnabled,
 
   /*** Only android methods*/

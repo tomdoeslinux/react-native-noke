@@ -36,12 +36,12 @@ repositories {
     maven { url "https://jitpack.io" }
 
     maven {
-        url 'http://dl.bintray.com/dev-fingerlinks/maven'
+        url 'https://dl.bintray.com/dev-fingerlinks/maven'
     }
     mavenCentral()
 }
 
 dependencies {
-    compile 'com.facebook.react:react-native:+'
+    implementation 'com.facebook.react:react-native:+'
     implementation 'com.google.code.gson:gson:2.8.2'
 }
